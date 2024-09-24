@@ -1,0 +1,12 @@
+<idea-plugin>
+    <id>ru.chimchima.idea-classic-icons</id>
+    <name>Classic Icons</name>
+    <vendor>Chimchima</vendor>
+
+    <depends>com.intellij.modules.platform</depends>
+
+    <extensions defaultExtensionNs="com.intellij">
+        <ApplicationLoadListener implementation="ru.chimchima.IconChanger"/>
+    </extensions>
+
+</idea-plugin>
