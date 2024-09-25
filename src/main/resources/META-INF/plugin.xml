@@ -1,12 +1,12 @@
-<idea-plugin>
+<idea-plugin require-restart="true">
     <id>ru.chimchima.idea-classic-icons</id>
     <name>Classic Icons</name>
     <vendor>Chimchima</vendor>
 
     <depends>com.intellij.modules.platform</depends>
 
-    <extensions defaultExtensionNs="com.intellij">
-        <ApplicationLoadListener implementation="ru.chimchima.IconChanger"/>
-    </extensions>
+    <applicationListeners>
+        <listener class="ru.chimchima.IconChanger" topic="com.intellij.ide.AppLifecycleListener"/>
+    </applicationListeners>
 
 </idea-plugin>
