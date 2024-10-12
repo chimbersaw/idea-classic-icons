@@ -1,5 +1,6 @@
 .intellijPlatform
 .gradle
+.kotlin
 build/
 tmp/
 certs/

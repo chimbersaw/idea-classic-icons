@@ -4,8 +4,8 @@ import java.nio.file.Files
 import java.nio.file.Paths
 
 plugins {
-    kotlin("jvm") version "2.0.20"
-    id("org.jetbrains.intellij.platform") version "2.0.1"
+    kotlin("jvm") version "2.0.21"
+    id("org.jetbrains.intellij.platform") version "2.1.0"
     id("org.jetbrains.changelog") version "2.2.1"
 }
 
