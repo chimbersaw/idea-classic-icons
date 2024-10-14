@@ -86,7 +86,18 @@ enum class Icons(
     RIDER_2024_2_6(RIDER, "Rider 2024", "/rider/rider-2024.2.6.icns"),
 
     ROVER_2024_1_8(RUST_ROVER, "Rust Rover 2024.1", "/rover/rover-2024.1.8.icns"),
-    ROVER_2024_2_3(RUST_ROVER, "Rust Rover 2024.2", "/rover/rover-2024.2.3.icns", default = true);
+    ROVER_2024_2_3(RUST_ROVER, "Rust Rover 2024.2", "/rover/rover-2024.2.3.icns", default = true),
+
+    RUBY_MINE_4_0_3(RUBY_MINE, "RubyMine 4.0", "/rubymine/rubymine-4.0.3.icns"),
+    RUBY_MINE_4_5_4(RUBY_MINE, "RubyMine 4.5", "/rubymine/rubymine-4.5.4.icns"),
+    RUBY_MINE_5_0_2(RUBY_MINE, "RubyMine 5.0", "/rubymine/rubymine-5.0.2.icns"),
+    RUBY_MINE_5_4_4(RUBY_MINE, "RubyMine 5.4", "/rubymine/rubymine-5.4.4.icns"),
+    RUBY_MINE_7_0_5(RUBY_MINE, "RubyMine 7", "/rubymine/rubymine-7.0.5.icns"),
+    RUBY_MINE_2016_1_2(RUBY_MINE, "RubyMine 2016", "/rubymine/rubymine-2016.1.2.icns"),
+    RUBY_MINE_2020_3_4(RUBY_MINE, "RubyMine 2020", "/rubymine/rubymine-2020.3.4.icns", default = true),
+    RUBY_MINE_2021_2_4(RUBY_MINE, "RubyMine 2021", "/rubymine/rubymine-2021.2.4.icns"),
+    RUBY_MINE_2023_3_8(RUBY_MINE, "RubyMine 2023", "/rubymine/rubymine-2023.3.8.icns"),
+    RUBY_MINE_2024_2_3(RUBY_MINE, "RubyMine 2024", "/rubymine/rubymine-2024.2.3.icns");
 
     private val previewPath = path.replace(".icns", ".png")
 
