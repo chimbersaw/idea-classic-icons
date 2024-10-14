@@ -56,7 +56,17 @@ enum class Icons(
     GOLAND_2020_3_5(GOLAND, "GoLand 2020", "/goland/goland-2020.3.5.icns", default = true),
     GOLAND_2021_2_5(GOLAND, "GoLand 2021", "/goland/goland-2021.2.5.icns"),
     GOLAND_2023_3_8(GOLAND, "GoLand 2023", "/goland/goland-2023.3.8.icns"),
-    GOLAND_2024_2_3(GOLAND, "GoLand 2024", "/goland/goland-2024.2.3.icns");
+    GOLAND_2024_2_3(GOLAND, "GoLand 2024", "/goland/goland-2024.2.3.icns"),
+
+    WEBSTORM_1_0_2(WEBSTORM, "WebStorm 1", "/webstorm/webstorm-1.0.2.icns"),
+    WEBSTORM_4_0_3(WEBSTORM, "WebStorm 4", "/webstorm/webstorm-4.0.3.icns"),
+    WEBSTORM_6_0_3(WEBSTORM, "WebStorm 6", "/webstorm/webstorm-6.0.3.icns"),
+    WEBSTORM_9_0_4(WEBSTORM, "WebStorm 9", "/webstorm/webstorm-9.0.4.icns"),
+    WEBSTORM_2016_1_3(WEBSTORM, "WebStorm 2016", "/webstorm/webstorm-2016.1.3.icns"),
+    WEBSTORM_2020_3_3(WEBSTORM, "WebStorm 2020", "/webstorm/webstorm-2020.3.3.icns", default = true),
+    WEBSTORM_2021_2_4(WEBSTORM, "WebStorm 2021", "/webstorm/webstorm-2021.2.4.icns"),
+    WEBSTORM_2023_3_8(WEBSTORM, "WebStorm 2023", "/webstorm/webstorm-2023.3.8.icns"),
+    WEBSTORM_2024_2_3(WEBSTORM, "WebStorm 2024", "/webstorm/webstorm-2024.2.3.icns");
 
     private val previewPath = path.replace(".icns", ".png")
 
