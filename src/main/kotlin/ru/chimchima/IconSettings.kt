@@ -36,21 +36,22 @@ class IconOptions : BoundConfigurable("Classic Icons Settings"), Configurable.Be
     }
 
     override fun createPanel(): DialogPanel {
-        fun createOption(icon: Icons): (Row.() -> Unit) = {
-            radioButton("", icon)
-            icon(icon.loadPreview())
-            label(icon.label)
+        fun Icons.createOption(): (Row.() -> Unit) = {
+            radioButton("", this@createOption)
+            icon(this@createOption.loadPreview())
+            label(this@createOption.label)
         }
 
         return panel {
             buttonsGroup {
-                val icons = Icons.current
-                val firstHalf = icons.take(icons.size / 2)
-                val secondHalf = icons.drop(icons.size / 2)
+                val icons: MutableList<Icons?> = Icons.current.toMutableList()
+                if (icons.size % 2 == 1) icons.add(null)
+                var firstHalf = icons.take(icons.size / 2)
+                var secondHalf = icons.drop(icons.size / 2)
                 firstHalf.zip(secondHalf).forEach {
                     twoColumnsRow(
-                        createOption(it.first),
-                        createOption(it.second)
+                        it.first?.createOption(),
+                        it.second?.createOption()
                     )
                 }
             }.bind(settings.state::selectedIcon)

@@ -75,7 +75,15 @@ enum class Icons(
     PHPSTORM_2020_3_3(PHPSTORM, "PhpStorm 2020", "/phpstorm/phpstorm-2020.3.3.icns", default = true),
     PHPSTORM_2021_2_4(PHPSTORM, "PhpStorm 2021", "/phpstorm/phpstorm-2021.2.4.icns"),
     PHPSTORM_2023_3_8(PHPSTORM, "PhpStorm 2023", "/phpstorm/phpstorm-2023.3.8.icns"),
-    PHPSTORM_2024_2_3(PHPSTORM, "PhpStorm 2024", "/phpstorm/phpstorm-2024.2.3.icns");
+    PHPSTORM_2024_2_3(PHPSTORM, "PhpStorm 2024", "/phpstorm/phpstorm-2024.2.3.icns"),
+
+    RIDER_2017_1_2(RIDER, "Rider 2017.1", "/rider/rider-2017.1.2.icns"),
+    RIDER_2017_2_1(RIDER, "Rider 2017.2", "/rider/rider-2017.2.1.icns"),
+    RIDER_2017_3_1(RIDER, "Rider 2017.3", "/rider/rider-2017.3.1.icns"),
+    RIDER_2020_3_4(RIDER, "Rider 2020", "/rider/rider-2020.3.4.icns", default = true),
+    RIDER_2021_2_3(RIDER, "Rider 2021", "/rider/rider-2021.2.3.icns"),
+    RIDER_2023_3_6(RIDER, "Rider 2023", "/rider/rider-2023.3.6.icns"),
+    RIDER_2024_2_6(RIDER, "Rider 2024", "/rider/rider-2024.2.6.icns");
 
     private val previewPath = path.replace(".icns", ".png")
 
