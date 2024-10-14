@@ -9,6 +9,7 @@ import com.intellij.openapi.components.Storage
 import com.intellij.openapi.options.BoundConfigurable
 import com.intellij.openapi.options.Configurable
 import com.intellij.openapi.ui.DialogPanel
+import com.intellij.ui.dsl.builder.Row
 import com.intellij.ui.dsl.builder.bind
 import com.intellij.ui.dsl.builder.panel
 import com.intellij.util.application
@@ -22,8 +23,8 @@ class IconSettings : SimplePersistentStateComponent<IconState>(IconState()) {
 }
 
 class IconState : BaseState() {
-    var currentIcon by enum<Icon>()
-    var selectedIcon by enum<Icon>(Icon.IDEA_CLASSIC)
+    var currentIcon by enum<Icons>()
+    var selectedIcon by enum<Icons>(Icons.default)
 }
 
 class IconOptions : BoundConfigurable("Classic Icons Settings"), Configurable.Beta {
@@ -35,13 +36,29 @@ class IconOptions : BoundConfigurable("Classic Icons Settings"), Configurable.Be
     }
 
     override fun createPanel(): DialogPanel {
+        fun createOption(icon: Icons): (Row.() -> Unit) = {
+            radioButton("", icon)
+            icon(icon.loadPreview())
+            label(icon.label)
+        }
+
         return panel {
             buttonsGroup {
-                Icon.entries.forEach {
-                    row {
-                        radioButton("", it)
-                        icon(it.loadPreview())
-                        label(it.label)
+                val icons = Icons.current
+                if (icons.size >= 10) {
+                    val firstHalf = icons.take(icons.size / 2)
+                    val secondHalf = icons.drop(icons.size / 2)
+                    firstHalf.zip(secondHalf).forEach {
+                        twoColumnsRow(
+                            createOption(it.first),
+                            createOption(it.second)
+                        )
+                    }
+                } else {
+                    icons.forEach {
+                        row {
+                            createOption(it).invoke(this)
+                        }
                     }
                 }
             }.bind(settings.state::selectedIcon)

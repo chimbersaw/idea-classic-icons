@@ -29,14 +29,13 @@ dependencies {
     testImplementation("junit:junit:4.13.2")
 
     intellijPlatform {
-        create(providers.gradleProperty("platformType"), providers.gradleProperty("platformVersion"))
+        intellijIdeaUltimate("2024.2.3")
 
         instrumentationTools()
         pluginVerifier()
         zipSigner()
         testFramework(TestFrameworkType.Platform)
     }
-
 }
 
 intellijPlatform {
