@@ -9,7 +9,6 @@ enum class IconPlatform(val label: String) {
     GOLAND("GoLand"),
     WEBSTORM("WebStorm"),
     PHPSTORM("PhpStorm"),
-    ANDROID_STUDIO("Android Studio"),
     RIDER("JetBrains Rider"),
     RUST_ROVER("Rust Rover"),
     RUBY_MINE("RubyMine");

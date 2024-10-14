@@ -66,7 +66,16 @@ enum class Icons(
     WEBSTORM_2020_3_3(WEBSTORM, "WebStorm 2020", "/webstorm/webstorm-2020.3.3.icns", default = true),
     WEBSTORM_2021_2_4(WEBSTORM, "WebStorm 2021", "/webstorm/webstorm-2021.2.4.icns"),
     WEBSTORM_2023_3_8(WEBSTORM, "WebStorm 2023", "/webstorm/webstorm-2023.3.8.icns"),
-    WEBSTORM_2024_2_3(WEBSTORM, "WebStorm 2024", "/webstorm/webstorm-2024.2.3.icns");
+    WEBSTORM_2024_2_3(WEBSTORM, "WebStorm 2024", "/webstorm/webstorm-2024.2.3.icns"),
+
+    PHPSTORM_2_1_5(PHPSTORM, "PhpStorm 2", "/phpstorm/phpstorm-2.1.5.icns"),
+    PHPSTORM_4_0_3(PHPSTORM, "PhpStorm 4", "/phpstorm/phpstorm-4.0.3.icns"),
+    PHPSTORM_6_0_4(PHPSTORM, "PhpStorm 6", "/phpstorm/phpstorm-6.0.4.icns"),
+    PHPSTORM_2016_1_2(PHPSTORM, "PhpStorm 2016", "/phpstorm/phpstorm-2016.1.2.icns"),
+    PHPSTORM_2020_3_3(PHPSTORM, "PhpStorm 2020", "/phpstorm/phpstorm-2020.3.3.icns", default = true),
+    PHPSTORM_2021_2_4(PHPSTORM, "PhpStorm 2021", "/phpstorm/phpstorm-2021.2.4.icns"),
+    PHPSTORM_2023_3_8(PHPSTORM, "PhpStorm 2023", "/phpstorm/phpstorm-2023.3.8.icns"),
+    PHPSTORM_2024_2_3(PHPSTORM, "PhpStorm 2024", "/phpstorm/phpstorm-2024.2.3.icns");
 
     private val previewPath = path.replace(".icns", ".png")
 
