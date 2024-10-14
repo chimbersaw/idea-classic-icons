@@ -10,7 +10,7 @@ enum class IconPlatform(val label: String) {
     WEBSTORM("WebStorm"),
     PHPSTORM("PhpStorm"),
     RIDER("JetBrains Rider"),
-    RUST_ROVER("Rust Rover"),
+    RUST_ROVER("RustRover"),
     RUBY_MINE("RubyMine");
 
     companion object {

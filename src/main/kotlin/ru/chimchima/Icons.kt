@@ -83,7 +83,10 @@ enum class Icons(
     RIDER_2020_3_4(RIDER, "Rider 2020", "/rider/rider-2020.3.4.icns", default = true),
     RIDER_2021_2_3(RIDER, "Rider 2021", "/rider/rider-2021.2.3.icns"),
     RIDER_2023_3_6(RIDER, "Rider 2023", "/rider/rider-2023.3.6.icns"),
-    RIDER_2024_2_6(RIDER, "Rider 2024", "/rider/rider-2024.2.6.icns");
+    RIDER_2024_2_6(RIDER, "Rider 2024", "/rider/rider-2024.2.6.icns"),
+
+    ROVER_2024_1_8(RUST_ROVER, "Rust Rover 2024.1", "/rover/rover-2024.1.8.icns"),
+    ROVER_2024_2_3(RUST_ROVER, "Rust Rover 2024.2", "/rover/rover-2024.2.3.icns", default = true);
 
     private val previewPath = path.replace(".icns", ".png")
 
