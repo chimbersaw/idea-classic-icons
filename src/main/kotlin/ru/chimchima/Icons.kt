@@ -49,7 +49,14 @@ enum class Icons(
     CLION_2020_3_4(CLION, "CLion 2020", "/clion/clion-2020.3.4.icns", default = true),
     CLION_2021_2_4(CLION, "CLion 2021", "/clion/clion-2021.2.4.icns"),
     CLION_2023_3_6(CLION, "CLion 2023", "/clion/clion-2023.3.6.icns"),
-    CLION_2024_2_2(CLION, "CLion 2024", "/clion/clion-2024.2.2.icns");
+    CLION_2024_2_2(CLION, "CLion 2024", "/clion/clion-2024.2.2.icns"),
+
+    GOLAND_2017_3_5(GOLAND, "GoLand 2017", "/goland/goland-2017.3.5.icns"),
+    GOLAND_2019_2_5(GOLAND, "GoLand 2019", "/goland/goland-2019.2.5.icns"),
+    GOLAND_2020_3_5(GOLAND, "GoLand 2020", "/goland/goland-2020.3.5.icns", default = true),
+    GOLAND_2021_2_5(GOLAND, "GoLand 2021", "/goland/goland-2021.2.5.icns"),
+    GOLAND_2023_3_8(GOLAND, "GoLand 2023", "/goland/goland-2023.3.8.icns"),
+    GOLAND_2024_2_3(GOLAND, "GoLand 2024", "/goland/goland-2024.2.3.icns");
 
     private val previewPath = path.replace(".icns", ".png")
 

@@ -45,21 +45,13 @@ class IconOptions : BoundConfigurable("Classic Icons Settings"), Configurable.Be
         return panel {
             buttonsGroup {
                 val icons = Icons.current
-                if (icons.size >= 10) {
-                    val firstHalf = icons.take(icons.size / 2)
-                    val secondHalf = icons.drop(icons.size / 2)
-                    firstHalf.zip(secondHalf).forEach {
-                        twoColumnsRow(
-                            createOption(it.first),
-                            createOption(it.second)
-                        )
-                    }
-                } else {
-                    icons.forEach {
-                        row {
-                            createOption(it).invoke(this)
-                        }
-                    }
+                val firstHalf = icons.take(icons.size / 2)
+                val secondHalf = icons.drop(icons.size / 2)
+                firstHalf.zip(secondHalf).forEach {
+                    twoColumnsRow(
+                        createOption(it.first),
+                        createOption(it.second)
+                    )
                 }
             }.bind(settings.state::selectedIcon)
         }
