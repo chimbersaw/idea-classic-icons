@@ -11,11 +11,12 @@ enum class IconPlatform(val label: String) {
     PHPSTORM("PhpStorm"),
     RIDER("JetBrains Rider"),
     RUST_ROVER("RustRover"),
-    RUBY_MINE("RubyMine");
+    RUBY_MINE("RubyMine"),
+    OTHER("Other");
 
     companion object {
         val CURRENT = ApplicationNamesInfo.getInstance().fullProductName.let { name ->
-            entries.find { it.label == name }
+            entries.find { it.label == name } ?: OTHER
         }
     }
 }

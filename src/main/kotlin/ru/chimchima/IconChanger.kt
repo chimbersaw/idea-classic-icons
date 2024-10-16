@@ -2,23 +2,54 @@ package ru.chimchima
 
 import com.intellij.ide.plugins.DynamicPluginListener
 import com.intellij.ide.plugins.IdeaPluginDescriptor
-import com.intellij.ide.plugins.PluginManagerConfigurable
 import com.intellij.openapi.application.PathManager
+import com.intellij.openapi.components.Service
+import com.intellij.openapi.components.Service.Level
 import com.intellij.openapi.util.SystemInfo
 import com.intellij.ui.MacCustomAppIcon
 import com.intellij.util.application
+import com.intellij.util.ui.ImageUtil
+import java.awt.Image
+import java.awt.Taskbar
 import java.nio.file.Files
 import java.nio.file.Paths
 import java.nio.file.StandardCopyOption
 
+@Service(Level.APP)
 class IconChanger : DynamicPluginListener {
+    private val settings = IconSettings.getInstance()
+
+    private fun setDockIcon(image: Image) {
+        Taskbar.getTaskbar().iconImage = ImageUtil.toBufferedImage(image)
+    }
+
+    fun changeIcon() {
+        if (SystemInfo.isMac) {
+            println("Setting custom icon...")
+
+            val customIconPath = Paths.get(PathManager.getHomePath(), "Resources", "custom.icns")
+            val current = settings.state.currentIcon
+            val icon = settings.state.selectedIcon
+            println("Current icon is ${current?.label}, selected icon is ${icon.label}")
+
+            if (current != icon || !MacCustomAppIcon.isCustom()) {
+                println("Copying custom icon to $customIconPath...")
+                Files.copy(icon.loadData(), customIconPath, StandardCopyOption.REPLACE_EXISTING)
+                MacCustomAppIcon.setCustom(value = true, showDialog = false)
+                settings.state.currentIcon = icon
+
+                println("Changing current dock icon...")
+                setDockIcon(icon.loadImage())
+
+                println("done")
+            }
+        }
+    }
+
     override fun pluginLoaded(pluginDescriptor: IdeaPluginDescriptor) {
         if (pluginDescriptor.pluginId.idString == "ru.chimchima.idea-classic-icons") {
-            application.invokeLater {
-                println("plugin load")
-                changeIcon()
-                PluginManagerConfigurable.shutdownOrRestartApp()
-            }
+            println("plugin load")
+            changeIcon()
         }
     }
 
@@ -30,25 +61,6 @@ class IconChanger : DynamicPluginListener {
     }
 
     companion object {
-        val settings = IconSettings.getInstance()
-
-        fun changeIcon() {
-            if (SystemInfo.isMac) {
-                println("Setting custom icon...")
-
-                val iconPath = Paths.get(PathManager.getHomePath(), "Resources", "custom.icns")
-                val current = settings.state.currentIcon
-                val icon = settings.state.selectedIcon
-                println("Current icon is ${current?.label}, selected icon is ${icon.label}")
-                if (current != icon || MacCustomAppIcon.isCustom() == false) {
-                    println("Copying icon to $iconPath...")
-                    Files.copy(icon.load(), iconPath, StandardCopyOption.REPLACE_EXISTING)
-
-                    MacCustomAppIcon.setCustom(value = true, showDialog = false)
-                    settings.state.currentIcon = icon
-                    println("done")
-                }
-            }
-        }
+        fun getInstance() = application.getService(IconChanger::class.java)
     }
 }

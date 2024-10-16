@@ -1,5 +1,4 @@
 import org.jetbrains.changelog.markdownToHTML
-import org.jetbrains.intellij.platform.gradle.TestFrameworkType
 import java.nio.file.Files
 import java.nio.file.Paths
 
@@ -26,7 +25,6 @@ repositories {
 
 dependencies {
     implementation("org.jetbrains.kotlin:kotlin-stdlib")
-    testImplementation("junit:junit:4.13.2")
 
     intellijPlatform {
         intellijIdeaUltimate("2024.2.3")
@@ -34,7 +32,6 @@ dependencies {
         instrumentationTools()
         pluginVerifier()
         zipSigner()
-        testFramework(TestFrameworkType.Platform)
     }
 }
 
@@ -76,27 +73,6 @@ intellijPlatform {
     pluginVerification {
         ides {
             recommended()
-        }
-    }
-}
-
-intellijPlatformTesting {
-    runIde {
-        register("runIdeForUiTests") {
-            task {
-                jvmArgumentProviders += CommandLineArgumentProvider {
-                    listOf(
-                        "-Drobot-server.port=8082",
-                        "-Dide.mac.message.dialogs.as.sheets=false",
-                        "-Djb.privacy.policy.text=<!--999.999-->",
-                        "-Djb.consents.confirmation.enabled=false",
-                    )
-                }
-            }
-
-            plugins {
-                robotServerPlugin()
-            }
         }
     }
 }

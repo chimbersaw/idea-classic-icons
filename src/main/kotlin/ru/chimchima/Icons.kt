@@ -2,7 +2,9 @@ package ru.chimchima
 
 import com.intellij.openapi.util.IconLoader
 import com.intellij.util.IconUtil
+import com.intellij.util.ImageLoader
 import ru.chimchima.IconPlatform.*
+import kotlin.error
 
 enum class Icons(
     val platform: IconPlatform,
@@ -99,10 +101,12 @@ enum class Icons(
     RUBY_MINE_2023_3_8(RUBY_MINE, "RubyMine 2023", "/rubymine/rubymine-2023.3.8.icns"),
     RUBY_MINE_2024_2_3(RUBY_MINE, "RubyMine 2024", "/rubymine/rubymine-2024.2.3.icns");
 
-    private val previewPath = path.replace(".icns", ".png")
+    private val pngPath = path.replace(".icns", ".png")
+    private fun resourceLoadFailed(): Nothing = error("Failed to load icon from resources: $name")
 
-    fun load() = this::class.java.getResourceAsStream(path) ?: error("Failed to load icon from resources: $name")
-    fun loadPreview() = IconLoader.getIcon(previewPath, Icons::class.java).let {
+    fun loadData() = this::class.java.getResourceAsStream(path) ?: resourceLoadFailed()
+    fun loadImage() = ImageLoader.loadFromResource(pngPath, Icons::class.java) ?: resourceLoadFailed()
+    fun loadIcon() = IconLoader.getIcon(pngPath, Icons::class.java).let {
         IconUtil.scale(it, null, 128.0f / it.iconWidth)
     }
 

@@ -29,16 +29,17 @@ class IconState : BaseState() {
 
 class IconOptions : BoundConfigurable("Classic Icons Settings"), Configurable.Beta {
     private val settings = IconSettings.getInstance()
+    private val iconChanger = IconChanger.getInstance()
 
     override fun apply() {
         super.apply()
-        IconChanger.changeIcon()
+        iconChanger.changeIcon()
     }
 
     override fun createPanel(): DialogPanel {
         fun Icons.createOption(): (Row.() -> Unit) = {
             radioButton("", this@createOption)
-            icon(this@createOption.loadPreview())
+            icon(this@createOption.loadIcon())
             label(this@createOption.label)
         }
 
