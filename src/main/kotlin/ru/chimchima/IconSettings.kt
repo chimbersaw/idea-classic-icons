@@ -11,8 +11,10 @@ import com.intellij.openapi.options.Configurable
 import com.intellij.openapi.ui.DialogPanel
 import com.intellij.ui.dsl.builder.Row
 import com.intellij.ui.dsl.builder.bind
+import com.intellij.ui.dsl.builder.bindSelected
 import com.intellij.ui.dsl.builder.panel
 import com.intellij.util.application
+import ru.chimchima.utils.twoColumns
 
 @Service(Level.APP)
 @State(name = "IconSettings", storages = [Storage("iconSettings.xml")])
@@ -23,8 +25,8 @@ class IconSettings : SimplePersistentStateComponent<IconState>(IconState()) {
 }
 
 class IconState : BaseState() {
-    var currentIcon by enum<Icons>()
-    var selectedIcon by enum<Icons>(Icons.default)
+    var selectedIcon by enum<Icon>(Icon.default)
+    var macStyledIcons by property(false)
 }
 
 class IconOptions : BoundConfigurable("Classic Icons Settings"), Configurable.Beta {
@@ -37,20 +39,26 @@ class IconOptions : BoundConfigurable("Classic Icons Settings"), Configurable.Be
     }
 
     override fun createPanel(): DialogPanel {
-        fun Icons.createOption(): (Row.() -> Unit) = {
+        fun Icon.createOption(): (Row.() -> Unit) = {
             radioButton("", this@createOption)
-            icon(this@createOption.loadIcon())
+            icon(this@createOption.loadPreviewIcon(scaled = false))
             label(this@createOption.label)
         }
 
         return panel {
+            row {
+                checkBox("Use macOS icon appearance")
+                    .comment("Enable this for smaller and compact icons.")
+                    .bindSelected(settings.state::macStyledIcons)
+            }
             buttonsGroup {
-                val icons: MutableList<Icons?> = Icons.current.toMutableList()
+                val icons: MutableList<Icon?> = Icon.current.toMutableList()
                 if (icons.size % 2 == 1) icons.add(null)
                 var firstHalf = icons.take(icons.size / 2)
                 var secondHalf = icons.drop(icons.size / 2)
                 firstHalf.zip(secondHalf).forEach {
-                    twoColumnsRow(
+                    twoColumns(
+                        IconPlatform.CURRENT,
                         it.first?.createOption(),
                         it.second?.createOption()
                     )

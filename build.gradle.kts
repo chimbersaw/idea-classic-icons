@@ -27,7 +27,7 @@ dependencies {
     implementation("org.jetbrains.kotlin:kotlin-stdlib")
 
     intellijPlatform {
-        intellijIdeaUltimate("2024.2.3")
+        intellijIdeaUltimate("2024.2.4")
 
         instrumentationTools()
         pluginVerifier()

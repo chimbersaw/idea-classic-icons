@@ -6,11 +6,13 @@ import com.intellij.openapi.application.PathManager
 import com.intellij.openapi.components.Service
 import com.intellij.openapi.components.Service.Level
 import com.intellij.openapi.util.SystemInfo
+import com.intellij.ui.AppIcon
 import com.intellij.ui.MacCustomAppIcon
 import com.intellij.util.application
 import com.intellij.util.ui.ImageUtil
 import java.awt.Image
 import java.awt.Taskbar
+import java.awt.image.BufferedImage
 import java.nio.file.Files
 import java.nio.file.Paths
 import java.nio.file.StandardCopyOption
@@ -19,8 +21,18 @@ import java.nio.file.StandardCopyOption
 class IconChanger : DynamicPluginListener {
     private val settings = IconSettings.getInstance()
 
-    private fun setDockIcon(image: Image) {
-        Taskbar.getTaskbar().iconImage = ImageUtil.toBufferedImage(image)
+    private fun setDockIcon(image: Image) = try {
+        // windows?
+        val bufferedImage = ImageUtil.toBufferedImage(image)
+        Taskbar.getTaskbar().iconImage = bufferedImage
+
+        val appIcon = AppIcon.getInstance()
+        val imageField = appIcon.javaClass.declaredFields.first { it.type == BufferedImage::class.java }
+        imageField.isAccessible = true
+        imageField.set(appIcon, bufferedImage)
+    } catch (e: Exception) {
+        println("Failed to set dock icon")
+        e.printStackTrace()
     }
 
     fun changeIcon() {
@@ -28,21 +40,22 @@ class IconChanger : DynamicPluginListener {
             println("Setting custom icon...")
 
             val customIconPath = Paths.get(PathManager.getHomePath(), "Resources", "custom.icns")
-            val current = settings.state.currentIcon
             val icon = settings.state.selectedIcon
-            println("Current icon is ${current?.label}, selected icon is ${icon.label}")
+            val scaled = settings.state.macStyledIcons.not()
+            println("Selected icon is ${icon.label}")
 
-            if (current != icon || !MacCustomAppIcon.isCustom()) {
-                println("Copying custom icon to $customIconPath...")
-                Files.copy(icon.loadData(), customIconPath, StandardCopyOption.REPLACE_EXISTING)
-                MacCustomAppIcon.setCustom(value = true, showDialog = false)
-                settings.state.currentIcon = icon
+            println("Copying custom icon to $customIconPath...")
+            val icns = icon.loadIcns(scaled)
+            Files.copy(icns, customIconPath, StandardCopyOption.REPLACE_EXISTING)
+            MacCustomAppIcon.setCustom(value = true, showDialog = false)
 
-                println("Changing current dock icon...")
-                setDockIcon(icon.loadImage())
+            println("Changing current dock icon...")
+            val image = icon.loadImage(scaled)
+            setDockIcon(image)
 
-                println("done")
-            }
+            println("done")
+        } else if (SystemInfo.isWindows) {
+            println("Not on macOS, i am here")
         }
     }
 
