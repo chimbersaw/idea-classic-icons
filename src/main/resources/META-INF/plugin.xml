@@ -15,6 +15,7 @@
 
     <applicationListeners>
         <listener class="ru.chimchima.IconChanger" topic="com.intellij.ide.plugins.DynamicPluginListener"/>
+        <listener class="ru.chimchima.IconChanger" topic="com.intellij.ide.AppLifecycleListener"/>
     </applicationListeners>
 
 </idea-plugin>

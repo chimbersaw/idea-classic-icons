@@ -1,5 +1,6 @@
 package ru.chimchima
 
+import com.intellij.ide.AppLifecycleListener
 import com.intellij.ide.plugins.DynamicPluginListener
 import com.intellij.ide.plugins.IdeaPluginDescriptor
 import com.intellij.openapi.application.PathManager
@@ -18,8 +19,9 @@ import java.nio.file.Paths
 import java.nio.file.StandardCopyOption
 
 @Service(Level.APP)
-class IconChanger : DynamicPluginListener {
+class IconChanger : DynamicPluginListener, AppLifecycleListener {
     private val settings = IconSettings.getInstance()
+    private val customIconPath = Paths.get(PathManager.getHomePath(), "Resources", "custom.icns")
 
     private fun setDockIcon(image: Image) = try {
         // windows?
@@ -39,7 +41,6 @@ class IconChanger : DynamicPluginListener {
         if (SystemInfo.isMac) {
             println("Setting custom icon...")
 
-            val customIconPath = Paths.get(PathManager.getHomePath(), "Resources", "custom.icns")
             val icon = settings.state.selectedIcon
             val scaled = settings.state.macStyledIcons.not()
             println("Selected icon is ${icon.label}")
@@ -70,6 +71,13 @@ class IconChanger : DynamicPluginListener {
         if (pluginDescriptor.pluginId.idString == "ru.chimchima.idea-classic-icons") {
             println("plugin unload")
             MacCustomAppIcon.setCustom(value = false, showDialog = false)
+        }
+    }
+
+    override fun appFrameCreated(commandLineArgs: List<String>) {
+        // After an update, the custom icon is lost
+        if (Files.notExists(customIconPath)) {
+            changeIcon()
         }
     }
 
