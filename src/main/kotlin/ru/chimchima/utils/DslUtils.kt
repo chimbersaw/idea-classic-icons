@@ -5,10 +5,7 @@ import com.intellij.ui.dsl.builder.Panel
 import com.intellij.ui.dsl.builder.Row
 import com.intellij.ui.dsl.builder.RowLayout
 import com.intellij.ui.dsl.gridLayout.UnscaledGaps
-import org.apache.commons.imaging.formats.icns.IcnsImageParser
 import ru.chimchima.IconPlatform
-import java.awt.image.BufferedImage
-import java.io.File
 
 private fun deluluGap(platform: IconPlatform): UnscaledGaps {
     val gap = when (platform) {

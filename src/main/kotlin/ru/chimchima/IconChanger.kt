@@ -78,10 +78,10 @@ class IconChanger : DynamicPluginListener, AppLifecycleListener {
                 MacCustomAppIcon.setCustom(value = false, showDialog = false)
 
                 val resources = Files.list(resourcesPath).toList()
-                val originalIcon = resources.first {
+                val originalIcon = resources.find {
                     val name = it.fileName.toString()
                     name.endsWith(".icns") && name != CUSTOM_ICNS
-                }
+                } ?: return
 
                 val image = IconUtils.getImageFromIcns(originalIcon.readBytes())
                 setDockIcon(image)

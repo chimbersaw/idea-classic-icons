@@ -4,7 +4,11 @@ import org.apache.commons.imaging.formats.icns.IcnsImageParser
 import java.awt.image.BufferedImage
 
 object IconUtils {
+    private val icnsParser by lazy {
+        IcnsImageParser()
+    }
+
     fun getImageFromIcns(icns: ByteArray): BufferedImage {
-        return IcnsImageParser().getAllBufferedImages(icns).maxBy { it.width }
+        return icnsParser.getAllBufferedImages(icns).maxBy { it.width }
     }
 }
