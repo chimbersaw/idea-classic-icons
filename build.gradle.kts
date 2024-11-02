@@ -12,7 +12,7 @@ group = providers.gradleProperty("pluginGroup").get()
 version = providers.gradleProperty("pluginVersion").get()
 
 kotlin {
-    jvmToolchain(17)
+    jvmToolchain(21)
 }
 
 repositories {
@@ -24,8 +24,6 @@ repositories {
 }
 
 dependencies {
-    implementation("org.jetbrains.kotlin:kotlin-stdlib")
-
     intellijPlatform {
         intellijIdeaUltimate("2024.2.4")
 
@@ -33,6 +31,10 @@ dependencies {
         pluginVerifier()
         zipSigner()
     }
+
+    implementation("org.jetbrains.kotlin:kotlin-stdlib")
+    implementation("org.eclipse.platform:org.eclipse.equinox.p2.publisher.eclipse:1.6.200")
+    implementation("org.apache.commons:commons-imaging:1.0.0-alpha5")
 }
 
 intellijPlatform {

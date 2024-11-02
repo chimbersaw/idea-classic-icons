@@ -1,9 +1,9 @@
 package ru.chimchima
 
-import com.intellij.openapi.util.IconLoader
 import com.intellij.util.IconUtil
-import com.intellij.util.ImageLoader
 import ru.chimchima.IconPlatform.*
+import ru.chimchima.utils.IconUtils
+import javax.swing.ImageIcon
 import kotlin.error
 
 enum class Icon(
@@ -117,18 +117,15 @@ enum class Icon(
 
     private fun resourceLoadFailed(): Nothing = error("Failed to load icon from resources: $name")
     private fun icnsPath(scaled: Boolean) = "$path/$filename${if (scaled) "-scaled" else ""}.icns"
-    private fun pngPath(scaled: Boolean) = "$path/$filename${if (scaled) "-scaled" else ""}.png"
 
     fun loadIcns(scaled: Boolean) = icnsPath(scaled).let {
         this::class.java.getResourceAsStream(it) ?: resourceLoadFailed()
     }
 
-    fun loadImage(scaled: Boolean) = pngPath(scaled).let {
-        ImageLoader.loadFromResource(it, Icon::class.java) ?: resourceLoadFailed()
-    }
+    fun loadImage(scaled: Boolean) = IconUtils.getImageFromIcns(loadIcns(scaled).readBytes())
 
-    fun loadPreviewIcon(scaled: Boolean) = pngPath(scaled).let {
-        val icon = IconLoader.getIcon(it, Icon::class.java)
+    fun loadPreviewIcon(scaled: Boolean) = loadImage(scaled).let {
+        val icon = ImageIcon(it)
         IconUtil.scale(icon, null, 128.0f / icon.iconWidth)
     }
 
