@@ -96,10 +96,10 @@ enum class Icon(
     RIDER_2024_2_7(RIDER, "Rider 2024", "/rider/rider-2024.2.7"),
     RIDER_2024_2_7_WIN(RIDER, "Rider 2024 (win)", "/rider/rider-2024.2.7w"),
 
-    ROVER_2024_1_8(RUST_ROVER, "Rust Rover 2024.1", "/rover/rover-2024.1.8"),
-    ROVER_2024_1_8_WIN(RUST_ROVER, "Rust Rover 2024.1 (win)", "/rover/rover-2024.1.8w", default = true),
-    ROVER_2024_2_4(RUST_ROVER, "Rust Rover 2024.2", "/rover/rover-2024.2.4"),
-    ROVER_2024_2_4_WIN(RUST_ROVER, "Rust Rover 2024.2 (win)", "/rover/rover-2024.2.4w"),
+    RUST_ROVER_2024_1_8(RUST_ROVER, "Rust Rover 2024.1", "/rover/rover-2024.1.8"),
+    RUST_ROVER_2024_1_8_WIN(RUST_ROVER, "Rust Rover 2024.1 (win)", "/rover/rover-2024.1.8w", default = true),
+    RUST_ROVER_2024_2_4(RUST_ROVER, "Rust Rover 2024.2", "/rover/rover-2024.2.4"),
+    RUST_ROVER_2024_2_4_WIN(RUST_ROVER, "Rust Rover 2024.2 (win)", "/rover/rover-2024.2.4w"),
 
     RUBY_MINE_4_0_3(RUBY_MINE, "RubyMine 4.0.3", "/rubymine/rubymine-4.0.3"),
     RUBY_MINE_4_5_4(RUBY_MINE, "RubyMine 4.5.4", "/rubymine/rubymine-4.5.4"),
@@ -122,7 +122,7 @@ enum class Icon(
         this::class.java.getResourceAsStream(it) ?: resourceLoadFailed()
     }
 
-    fun loadImage(scaled: Boolean) = IconUtils.getImageFromIcns(loadIcns(scaled).readBytes())
+    fun loadImage(scaled: Boolean) = IconUtils.getImageFromIcns(loadIcns(scaled).use { it.readBytes() })
 
     fun loadPreviewIcon(scaled: Boolean) = loadImage(scaled).let {
         val icon = ImageIcon(it)

@@ -1,6 +1,4 @@
 import org.jetbrains.changelog.markdownToHTML
-import java.nio.file.Files
-import java.nio.file.Paths
 
 plugins {
     kotlin("jvm") version "2.0.21"
@@ -61,13 +59,13 @@ intellijPlatform {
     }
 
     signing {
-        certificateChain = Files.readString(Paths.get("certs/chain.crt"))
-        privateKey = Files.readString(Paths.get("certs/private.pem"))
-        password = Files.readString(Paths.get("certs/password.txt")).trim()
+        certificateChain = file("certs/chain.crt").readText()
+        privateKey = file("certs/private.pem").readText()
+        password = file("certs/password.txt").readText().trim()
     }
 
     publishing {
-        token = Files.readString(Paths.get("certs/token.txt")).trim()
+        token = file("certs/token.txt").readText().trim()
         channels = providers.gradleProperty("pluginVersion")
             .map { listOf(it.substringAfter('-', "").substringBefore('.').ifEmpty { "default" }) }
     }

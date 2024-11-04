@@ -25,8 +25,9 @@ private const val CUSTOM_ICNS = "custom.icns"
 @Service(Level.APP)
 class IconChanger : DynamicPluginListener, AppLifecycleListener {
     private val settings = IconSettings.getInstance()
-    private val resourcesPath = Paths.get(PathManager.getHomePath(), "Resources")
-    private val customIconPath = resourcesPath.resolve(CUSTOM_ICNS)
+    private val homePath = Paths.get(PathManager.getHomePath())
+    private val macResourcesPath = homePath.resolve("Resources")
+    private val customIconPath = macResourcesPath.resolve(CUSTOM_ICNS)
 
     private fun setDockIcon(image: Image) = try {
         val bufferedImage = ImageUtil.toBufferedImage(image)
@@ -50,8 +51,9 @@ class IconChanger : DynamicPluginListener, AppLifecycleListener {
             println("Selected icon is ${icon.label}")
 
             println("Copying custom icon to $customIconPath...")
-            val icns = icon.loadIcns(scaled)
-            Files.copy(icns, customIconPath, StandardCopyOption.REPLACE_EXISTING)
+            icon.loadIcns(scaled).use {
+                Files.copy(it, customIconPath, StandardCopyOption.REPLACE_EXISTING)
+            }
             MacCustomAppIcon.setCustom(value = true, showDialog = false)
 
             println("Changing current dock icon...")
@@ -77,12 +79,8 @@ class IconChanger : DynamicPluginListener, AppLifecycleListener {
             if (SystemInfo.isMac) {
                 MacCustomAppIcon.setCustom(value = false, showDialog = false)
 
-                val resources = Files.list(resourcesPath).toList()
-                val originalIcon = resources.find {
-                    val name = it.fileName.toString()
-                    name.endsWith(".icns") && name != CUSTOM_ICNS
-                } ?: return
-
+                val platformName = IconPlatform.CURRENT.shortName
+                val originalIcon = macResourcesPath.resolve("$platformName.icns")
                 val image = IconUtils.getImageFromIcns(originalIcon.readBytes())
                 setDockIcon(image)
             }
