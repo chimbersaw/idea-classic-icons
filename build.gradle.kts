@@ -31,8 +31,10 @@ dependencies {
     }
 
     implementation("org.jetbrains.kotlin:kotlin-stdlib")
-    implementation("org.eclipse.platform:org.eclipse.equinox.p2.publisher.eclipse:1.6.200")
     implementation("org.apache.commons:commons-imaging:1.0.0-alpha5")
+    implementation("org.eclipse.platform:org.eclipse.equinox.p2.publisher.eclipse:1.6.200") {
+        isTransitive = false
+    }
 }
 
 intellijPlatform {
