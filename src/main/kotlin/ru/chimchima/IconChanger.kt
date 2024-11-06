@@ -23,6 +23,7 @@ import java.nio.file.Files
 import java.nio.file.Paths
 import java.nio.file.StandardCopyOption
 import kotlin.io.path.listDirectoryEntries
+import kotlin.io.path.notExists
 import kotlin.io.path.readBytes
 
 private const val CUSTOM_ICNS = "custom.icns"
@@ -33,6 +34,7 @@ private const val IDEA_CLASSIC_ICONS_FQN = "ru.chimchima.$IDEA_CLASSIC_ICONS"
 class IconChanger : DynamicPluginListener, AppLifecycleListener {
     private val settings = IconSettings.getInstance()
     private val homePath = Paths.get(PathManager.getHomePath())
+    private val binPath = homePath.resolve("bin")
     private val macResourcesPath = homePath.resolve("Resources")
     private val customIconPath = macResourcesPath.resolve(CUSTOM_ICNS)
 
@@ -89,11 +91,22 @@ class IconChanger : DynamicPluginListener, AppLifecycleListener {
             val jarPath = PathManager.getPluginsDir().resolve(IDEA_CLASSIC_ICONS).resolve("lib")
                 .listDirectoryEntries("org.eclipse.equinox.p2.publisher.eclipse*.jar").first()
             val className = "org.eclipse.pde.internal.swt.tools.IconExe"
-            val firstArg = homePath.resolve("bin").resolve(exeName)
-            val secondArg = "Y:\\IdeaProjects\\win-idea\\clion.ico"
+            val exe = binPath.resolve(exeName)
+
+            val ico = binPath.resolve("$ide.ico")
+            val backup = binPath.resolve("$ide.backup.ico")
+            if (backup.notExists()) {
+                Files.move(ico, backup)
+            }
+
+            val icon = settings.state.selectedIcon
+            val scaled = settings.state.macStyledIcons.not()
+            icon.loadIco(scaled).use {
+                Files.copy(it, ico, StandardCopyOption.REPLACE_EXISTING)
+            }
 
             val powershellScript = """
-                & '$javaPath' -cp '$jarPath' $className '$firstArg' '$secondArg';
+                & '$javaPath' -cp '$jarPath' $className '$exe' '$ico';
                 if (Test-Path `${"$"}env:LOCALAPPDATA\IconCache.db) {
                     Remove-Item -Path `${"$"}env:LOCALAPPDATA\IconCache.db -Force
                 };

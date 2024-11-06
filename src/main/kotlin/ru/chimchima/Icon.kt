@@ -116,9 +116,15 @@ enum class Icon(
     private val filename = path.substringAfterLast('/')
 
     private fun resourceLoadFailed(): Nothing = error("Failed to load icon from resources: $name")
-    private fun icnsPath(scaled: Boolean) = "$path/$filename${if (scaled) "-scaled" else ""}.icns"
+    private fun path(scaled: Boolean, extension: String) = "$path/$filename${if (scaled) "-scaled" else ""}.$extension"
+    private fun icnsPath(scaled: Boolean) = path(scaled, "icns")
+    private fun icoPath(scaled: Boolean) = path(scaled, "ico")
 
     fun loadIcns(scaled: Boolean) = icnsPath(scaled).let {
+        this::class.java.getResourceAsStream(it) ?: resourceLoadFailed()
+    }
+
+    fun loadIco(scaled: Boolean) = icoPath(scaled).let {
         this::class.java.getResourceAsStream(it) ?: resourceLoadFailed()
     }
 
