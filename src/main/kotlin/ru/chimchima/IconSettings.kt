@@ -1,6 +1,7 @@
 package ru.chimchima
 
 import com.intellij.openapi.components.BaseState
+import com.intellij.openapi.components.RoamingType
 import com.intellij.openapi.components.Service
 import com.intellij.openapi.components.Service.Level
 import com.intellij.openapi.components.SimplePersistentStateComponent
@@ -17,7 +18,7 @@ import com.intellij.util.application
 import ru.chimchima.utils.twoColumns
 
 @Service(Level.APP)
-@State(name = "IconSettings", storages = [Storage("iconSettings.xml")])
+@State(name = "IconSettings", storages = [Storage("iconSettings.xml", roamingType = RoamingType.PER_OS)])
 class IconSettings : SimplePersistentStateComponent<IconState>(IconState()) {
     companion object {
         fun getInstance() = application.getService(IconSettings::class.java)

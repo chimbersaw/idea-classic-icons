@@ -3,9 +3,9 @@ package ru.chimchima
 import com.intellij.ide.AppLifecycleListener
 import com.intellij.ide.plugins.DynamicPluginListener
 import com.intellij.ide.plugins.IdeaPluginDescriptor
-import com.intellij.ide.plugins.PluginManagerConfigurable
 import com.intellij.openapi.application.PathManager
 import com.intellij.openapi.application.ex.ApplicationEx.EXIT_CONFIRMED
+import com.intellij.openapi.application.ex.ApplicationEx.SAVE
 import com.intellij.openapi.components.Service
 import com.intellij.openapi.components.Service.Level
 import com.intellij.openapi.ui.Messages
@@ -16,6 +16,7 @@ import com.intellij.util.application
 import com.intellij.util.system.CpuArch
 import com.intellij.util.ui.ImageUtil
 import ru.chimchima.utils.IconUtils
+import ru.chimchima.utils.showRestartDialog
 import java.awt.Image
 import java.awt.Taskbar
 import java.awt.image.BufferedImage
@@ -78,7 +79,7 @@ class IconChanger : DynamicPluginListener, AppLifecycleListener {
     }
 
     private fun changeIconWindows() {
-        val answer = PluginManagerConfigurable.showRestartDialog()
+        val answer = showRestartDialog()
         if (answer == Messages.YES) {
             val ide = IconPlatform.CURRENT.shortName
             val exeName = if (CpuArch.is32Bit()) {
@@ -107,11 +108,11 @@ class IconChanger : DynamicPluginListener, AppLifecycleListener {
 
             val powershellScript = """
                 & '$javaPath' -cp '$jarPath' $className '$exe' '$ico';
-                if (Test-Path `${"$"}env:LOCALAPPDATA\IconCache.db) {
-                    Remove-Item -Path `${"$"}env:LOCALAPPDATA\IconCache.db -Force
+                if (Test-Path ${"$"}env:LOCALAPPDATA\IconCache.db) {
+                    Remove-Item -Path ${"$"}env:LOCALAPPDATA\IconCache.db -Force
                 };
-                if (Test-Path "`${"$"}env:LOCALAPPDATA\Microsoft\Windows\Explorer\iconcache*") {
-                    Remove-Item -Path "`${"$"}env:LOCALAPPDATA\Microsoft\Windows\Explorer\iconcache*" -Force
+                if (Test-Path "${"$"}env:LOCALAPPDATA\Microsoft\Windows\Explorer\iconcache*") {
+                    Remove-Item -Path "${"$"}env:LOCALAPPDATA\Microsoft\Windows\Explorer\iconcache*" -Force
                 };
                 Stop-Process -Name explorer -Force
             """.trimIndent()
@@ -125,14 +126,16 @@ class IconChanger : DynamicPluginListener, AppLifecycleListener {
             )
 
             val restart = application.javaClass.getMethod("restart", Int::class.java, Array<String>::class.java)
-            restart.invoke(application, EXIT_CONFIRMED, command.toTypedArray())
+            restart.invoke(application, SAVE or EXIT_CONFIRMED, command.toTypedArray())
         }
     }
 
     override fun pluginLoaded(pluginDescriptor: IdeaPluginDescriptor) {
         if (pluginDescriptor.pluginId.idString == IDEA_CLASSIC_ICONS_FQN) {
             println("plugin load")
-            changeIcon()
+            if (SystemInfo.isMac) {
+                changeIcon()
+            }
         }
     }
 
@@ -158,6 +161,6 @@ class IconChanger : DynamicPluginListener, AppLifecycleListener {
     }
 
     companion object {
-        fun getInstance() = application.getService(IconChanger::class.java)
+        fun getInstance(): IconChanger = application.getService(IconChanger::class.java)
     }
 }

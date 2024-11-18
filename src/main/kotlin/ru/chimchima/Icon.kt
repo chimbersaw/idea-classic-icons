@@ -98,8 +98,8 @@ enum class Icon(
 
     RUST_ROVER_2024_1_8(RUST_ROVER, "Rust Rover 2024.1", "/rover/rover-2024.1.8"),
     RUST_ROVER_2024_1_8_WIN(RUST_ROVER, "Rust Rover 2024.1 (win)", "/rover/rover-2024.1.8w", default = true),
-    RUST_ROVER_2024_2_4(RUST_ROVER, "Rust Rover 2024.2", "/rover/rover-2024.2.4"),
-    RUST_ROVER_2024_2_4_WIN(RUST_ROVER, "Rust Rover 2024.2 (win)", "/rover/rover-2024.2.4w"),
+    RUST_ROVER_2024_2_5(RUST_ROVER, "Rust Rover 2024.2", "/rover/rover-2024.2.5"),
+    RUST_ROVER_2024_2_5_WIN(RUST_ROVER, "Rust Rover 2024.2 (win)", "/rover/rover-2024.2.5w"),
 
     RUBY_MINE_4_0_3(RUBY_MINE, "RubyMine 4.0.3", "/rubymine/rubymine-4.0.3"),
     RUBY_MINE_4_5_4(RUBY_MINE, "RubyMine 4.5.4", "/rubymine/rubymine-4.5.4"),
@@ -116,9 +116,9 @@ enum class Icon(
     private val filename = path.substringAfterLast('/')
 
     private fun resourceLoadFailed(): Nothing = error("Failed to load icon from resources: $name")
-    private fun path(scaled: Boolean, extension: String) = "$path/$filename${if (scaled) "-scaled" else ""}.$extension"
-    private fun icnsPath(scaled: Boolean) = path(scaled, "icns")
-    private fun icoPath(scaled: Boolean) = path(scaled, "ico")
+    private fun getPath(scaled: Boolean, extension: String) = "$path/$filename${if (scaled) "-scaled" else ""}.$extension"
+    private fun icnsPath(scaled: Boolean) = getPath(scaled, "icns")
+    private fun icoPath(scaled: Boolean) = getPath(scaled, "ico")
 
     fun loadIcns(scaled: Boolean) = icnsPath(scaled).let {
         this::class.java.getResourceAsStream(it) ?: resourceLoadFailed()

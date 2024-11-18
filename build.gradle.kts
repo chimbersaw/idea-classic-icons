@@ -23,7 +23,7 @@ repositories {
 
 dependencies {
     intellijPlatform {
-        intellijIdeaUltimate("2024.2.4")
+        intellijIdeaUltimate("2024.3")
 
         instrumentationTools()
         pluginVerifier()
