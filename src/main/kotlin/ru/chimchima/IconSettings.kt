@@ -1,12 +1,7 @@
 package ru.chimchima
 
-import com.intellij.openapi.components.BaseState
-import com.intellij.openapi.components.RoamingType
-import com.intellij.openapi.components.Service
+import com.intellij.openapi.components.*
 import com.intellij.openapi.components.Service.Level
-import com.intellij.openapi.components.SimplePersistentStateComponent
-import com.intellij.openapi.components.State
-import com.intellij.openapi.components.Storage
 import com.intellij.openapi.options.BoundConfigurable
 import com.intellij.openapi.options.Configurable
 import com.intellij.openapi.ui.DialogPanel
@@ -35,8 +30,10 @@ class IconOptions : BoundConfigurable("Classic Icons Settings"), Configurable.Be
     private val iconChanger = IconChanger.getInstance()
 
     override fun apply() {
-        super.apply()
-        iconChanger.changeIcon()
+        if (iconChanger.canChange()) {
+            super.apply()
+            iconChanger.changeIcon()
+        }
     }
 
     override fun createPanel(): DialogPanel {

@@ -29,7 +29,7 @@ fun showRestartDialog(): Int {
         message,
         title,
         action,
-        IdeBundle.message("ide.notnow.action"),
+        IdeBundle.message("link.cancel"),
         Messages.getQuestionIcon()
     )
 }

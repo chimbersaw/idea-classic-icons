@@ -1,8 +1,8 @@
 import org.jetbrains.changelog.markdownToHTML
 
 plugins {
-    kotlin("jvm") version "2.0.21"
-    id("org.jetbrains.intellij.platform") version "2.1.0"
+    kotlin("jvm") version "2.1.0"
+    id("org.jetbrains.intellij.platform") version "2.2.0"
     id("org.jetbrains.changelog") version "2.2.1"
 }
 
@@ -25,14 +25,13 @@ dependencies {
     intellijPlatform {
         intellijIdeaUltimate("2024.3")
 
-        instrumentationTools()
         pluginVerifier()
         zipSigner()
     }
 
     implementation("org.jetbrains.kotlin:kotlin-stdlib")
     implementation("org.apache.commons:commons-imaging:1.0.0-alpha5")
-    implementation("org.eclipse.platform:org.eclipse.equinox.p2.publisher.eclipse:1.6.200") {
+    implementation("org.eclipse.platform:org.eclipse.equinox.p2.publisher.eclipse:1.6.300") {
         isTransitive = false
     }
 }

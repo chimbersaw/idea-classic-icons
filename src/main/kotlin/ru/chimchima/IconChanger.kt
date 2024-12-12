@@ -4,8 +4,10 @@ import com.intellij.ide.AppLifecycleListener
 import com.intellij.ide.plugins.DynamicPluginListener
 import com.intellij.ide.plugins.IdeaPluginDescriptor
 import com.intellij.openapi.application.PathManager
+import com.intellij.openapi.application.ex.ApplicationEx
 import com.intellij.openapi.application.ex.ApplicationEx.EXIT_CONFIRMED
 import com.intellij.openapi.application.ex.ApplicationEx.SAVE
+import com.intellij.openapi.application.ex.ApplicationManagerEx
 import com.intellij.openapi.components.Service
 import com.intellij.openapi.components.Service.Level
 import com.intellij.openapi.ui.Messages
@@ -52,6 +54,12 @@ class IconChanger : DynamicPluginListener, AppLifecycleListener {
         e.printStackTrace()
     }
 
+    fun canChange() = when {
+        SystemInfo.isMac -> true
+        SystemInfo.isWindows -> showRestartDialog() == Messages.YES
+        else -> false
+    }
+
     fun changeIcon() {
         if (SystemInfo.isMac) {
             println("Setting custom icon...")
@@ -79,34 +87,32 @@ class IconChanger : DynamicPluginListener, AppLifecycleListener {
     }
 
     private fun changeIconWindows() {
-        val answer = showRestartDialog()
-        if (answer == Messages.YES) {
-            val ide = IconPlatform.CURRENT.shortName
-            val exeName = if (CpuArch.is32Bit()) {
-                "${ide}.exe"
-            } else {
-                "${ide}64.exe"
-            }
+        val ide = IconPlatform.CURRENT.shortName
+        val exeName = if (CpuArch.is32Bit()) {
+            "${ide}.exe"
+        } else {
+            "${ide}64.exe"
+        }
 
-            val javaPath = homePath.resolve("jbr").resolve("bin").resolve("java.exe")
-            val jarPath = PathManager.getPluginsDir().resolve(IDEA_CLASSIC_ICONS).resolve("lib")
-                .listDirectoryEntries("org.eclipse.equinox.p2.publisher.eclipse*.jar").first()
-            val className = "org.eclipse.pde.internal.swt.tools.IconExe"
-            val exe = binPath.resolve(exeName)
+        val javaPath = homePath.resolve("jbr").resolve("bin").resolve("java.exe")
+        val jarPath = PathManager.getPluginsDir().resolve(IDEA_CLASSIC_ICONS).resolve("lib")
+            .listDirectoryEntries("org.eclipse.equinox.p2.publisher.eclipse*.jar").first()
+        val className = "org.eclipse.pde.internal.swt.tools.IconExe"
+        val exe = binPath.resolve(exeName)
 
-            val ico = binPath.resolve("$ide.ico")
-            val backup = binPath.resolve("$ide.backup.ico")
-            if (backup.notExists()) {
-                Files.move(ico, backup)
-            }
+        val ico = binPath.resolve("$ide.ico")
+        val backup = binPath.resolve("$ide.backup.ico")
+        if (backup.notExists()) {
+            Files.move(ico, backup)
+        }
 
-            val icon = settings.state.selectedIcon
-            val scaled = settings.state.macStyledIcons.not()
-            icon.loadIco(scaled).use {
-                Files.copy(it, ico, StandardCopyOption.REPLACE_EXISTING)
-            }
+        val icon = settings.state.selectedIcon
+        val scaled = settings.state.macStyledIcons.not()
+        icon.loadIco(scaled).use {
+            Files.copy(it, ico, StandardCopyOption.REPLACE_EXISTING)
+        }
 
-            val powershellScript = """
+        val powershellScript = """
                 & '$javaPath' -cp '$jarPath' $className '$exe' '$ico';
                 if (Test-Path ${"$"}env:LOCALAPPDATA\IconCache.db) {
                     Remove-Item -Path ${"$"}env:LOCALAPPDATA\IconCache.db -Force
@@ -117,17 +123,16 @@ class IconChanger : DynamicPluginListener, AppLifecycleListener {
                 Stop-Process -Name explorer -Force
             """.trimIndent()
 
-            val command = listOf(
-                "powershell.exe",
-                "-NoProfile",
-                "-NonInteractive",
-                "-Command",
-                powershellScript
-            )
+        val command = listOf(
+            "powershell.exe",
+            "-NoProfile",
+            "-NonInteractive",
+            "-Command",
+            powershellScript
+        )
 
-            val restart = application.javaClass.getMethod("restart", Int::class.java, Array<String>::class.java)
-            restart.invoke(application, SAVE or EXIT_CONFIRMED, command.toTypedArray())
-        }
+        val restart = application.javaClass.getMethod("restart", Int::class.java, Array<String>::class.java)
+        restart.invoke(application, SAVE or EXIT_CONFIRMED, command.toTypedArray())
     }
 
     override fun pluginLoaded(pluginDescriptor: IdeaPluginDescriptor) {
